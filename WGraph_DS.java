@@ -133,36 +133,62 @@ public class WGraph_DS implements weighted_graph {
 
     @Override
     public boolean equals(Object graph){
+        //making sure the input object is weighted_graph object
+        if(!(graph instanceof weighted_graph)){
+            return false;
+        }
         weighted_graph g = (WGraph_DS) graph;
+        //basic condition to be equals
         if(this.edgeSize() != g.edgeSize() || this.nodeSize() != g.nodeSize()) return false;
+
         boolean flag = true;
         Collection<node_info> gPointer = g.getV();
-        int[] gVertex = new int[gPointer.size()];
         Collection<node_info> thisPointer = this.getV();
+        int[] gVertex = new int[gPointer.size()];
         int[] thisVertex = new int[thisPointer.size()];
         int i = 0;
+        //copying all the vertexes keys of each graph to it's own array for simplification use
         for (node_info node: gPointer){
             gVertex[i++] = node.getKey();
         }
-        int j = 0;
+        i = 0;
         for(node_info node:thisPointer){
-            thisVertex[j++] = node.getKey();
+            thisVertex[i++] = node.getKey();
         }
         Arrays.sort(gVertex);
         Arrays.sort(thisVertex);
-            for (int k = 0; k < thisVertex.length; k++) {
-                Iterator<node_info> gIt = g.getV(gVertex[k]).iterator();
-                Iterator<node_info> thisIt = this.getV(thisVertex[k]).iterator();
-                while (thisIt.hasNext() && gIt.hasNext()) {
-                    node_info gNeighbor = gIt.next();
-                    node_info thisNeighbor = thisIt.next();
-                    double gEdge = g.getEdge(gVertex[k], gNeighbor.getKey());
-                    double thisEdge = this.getEdge(thisVertex[k], thisNeighbor.getKey());
-                    if (gNeighbor.getKey()!=thisNeighbor.getKey() || gEdge!=thisEdge) {
-                        flag = false;
-                        break;
-                    }
+        for (int k = 0; k < thisVertex.length; k++) {
+            if (flag == false) break;
+            //if the nodes doesn't have the same key
+            if(gVertex[k] != thisVertex[k]){
+                flag = false;
+                break;
+            }
+            Collection<node_info> gNodeNeighbors = g.getV(gVertex[k]);//current g's node's neighbors
+            Collection<node_info> thisNodeNeighbors = this.getV(thisVertex[k]);//current graph current node's neighbors
+            int[] gNeighbors = new int[gNodeNeighbors.size()];
+            int[] tNeighbors = new int[thisNodeNeighbors.size()];
+            int t = 0;
+            //copying all the current nodes neighbors keys it's an array for simplification use
+            for (node_info n : gNodeNeighbors) {
+                gNeighbors[t++] = n.getKey();
+            }
+            t = 0;
+            for (node_info n : thisNodeNeighbors) {
+                tNeighbors[t++] = n.getKey();
+            }
+            Arrays.sort(tNeighbors);
+            Arrays.sort(gNeighbors);
+            //comparing between all the neighbors of the current nodes
+            for (int l = 0; l < tNeighbors.length; l++) {
+                double gEdge = g.getEdge(gVertex[k], gNeighbors[l]);
+                double thisEdge = this.getEdge(thisVertex[k], tNeighbors[l]);
+                //if neighbor's keys or the existing edge between them to current nodes are different
+                if (gNeighbors[l] != tNeighbors[l] || gEdge != thisEdge) {
+                    flag = false;
+                    break;
                 }
+            }
         }
         return flag;
     }

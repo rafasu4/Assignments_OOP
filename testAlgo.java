@@ -67,9 +67,13 @@ class WGraph_AlgoTest {
         weighted_graph_algorithms ag0 = new WGraph_Algo();
         ag0.init(g0);
         String str = "g0.txt";
+        String str1 = "g1.txt";
         ag0.save(str);
         weighted_graph g1 = WGraph_DSTest.graph_creator(10,30,1);
+        ag0.init(g1);
+        ag0.save(str1);
         ag0.load(str);
+        System.out.println(g0.equals(g1));
         assertEquals(g0,g1);
         g0.removeNode(0);
         assertNotEquals(g0,g1);

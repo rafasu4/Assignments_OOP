@@ -173,12 +173,14 @@ public class WGraph_Algo implements weighted_graph_algorithms{
     public boolean save(String file) {
         boolean flag = false;
         try {
-            File files = new File(file+"/.txt");
-            PrintWriter pw = new PrintWriter(new File(file));
+            File files = new File(file);
+            PrintWriter pw = new PrintWriter(files);
             StringBuilder sb = new StringBuilder();
+            //writing down this graph components
             for (node_info vertex: this.g.getV()) {
                 sb.append(vertex.getKey());
                 sb.append("- neighbors -");
+                //adding all of current's neighbors
                 for (node_info neighbor: g.getV(vertex.getKey())) {
                     sb.append(neighbor.getKey()+"/"+g.getEdge(vertex.getKey(), neighbor.getKey()));
                     sb.append(",");
@@ -208,10 +210,9 @@ public class WGraph_Algo implements weighted_graph_algorithms{
                 int nodeKey = Integer.parseInt(nodeInfo[0]);
                 g.addNode(nodeKey);
                 line = nodeInfo[1];
-
-                nodeInfo = line.split(",");
+                nodeInfo = line.split(",");//separating to each neighbor and it's edge
                 for (int i = 0; i < nodeInfo.length ; i++) {
-                    String innerSub[] = nodeInfo[i].split("/");
+                    String innerSub[] = nodeInfo[i].split("/");//separating between current neighbor and it's edge
                     int neighborKey = Integer.parseInt(innerSub[0]);
                     double neighborEdge = Double.parseDouble(innerSub[1]);
                     g.addNode(neighborKey);

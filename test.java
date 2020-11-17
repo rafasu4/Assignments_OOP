@@ -10,7 +10,7 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class test {
+ class test {
     private static Random _rnd = null;
 
     @Test
